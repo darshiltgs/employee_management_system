@@ -1,8 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { Sequelize } from "sequelize";
-import { DB_NAME } from "./constants.js";
+import userRouter from "./routes/user.routes.js";
 
 // define app
 const app = express();
@@ -19,9 +18,6 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" })); // for get data 
 app.use(express.static("public")) // save some static files
 app.use(cookieParser()); // to parse cookies
 
-export const sequelize = new Sequelize(DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
-  dialect: "mysql",
-  host: process.env.DB_HOST,
-});
+app.use("/api/v1/users", userRouter);
 
 export { app }
