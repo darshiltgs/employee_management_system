@@ -1,14 +1,8 @@
-import { Sequelize } from "sequelize";
-import { DB_NAME } from "../constants.js";
-import { app } from "../app.js";
-
-const sequelize = new Sequelize(DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
-  dialect: "mysql",
-  host: process.env.DB_HOST,
-});
+import { app, sequelize } from "../app.js";
 
 export const syncDatabase = () => {
-  sequelize.sync().then(() => {
+  sequelize.sync().then((data) => {
+    console.log(data);
     console.log("Database & Tables Created!");
     app.listen(process.env.PORT, () => {
       console.log(`Server is listening on ${process.env.PORT} port`);
