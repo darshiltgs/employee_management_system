@@ -43,8 +43,8 @@ const Department = sequelize.define('Department', {
   }
 }, { timestamps: true });
 
-Department.belongsTo(User, { as: 'creator', foreignKey: 'created_by' });
-Department.belongsTo(User, { as: 'updater', foreignKey: 'updated_by' });
-Department.belongsTo(User, { as: 'deleter', foreignKey: 'deleted_by' });
+Department.belongsTo(User, { as: 'creator', foreignKey: 'createdBy' });
+Department.belongsTo(User, { as: 'updater', foreignKey: 'updatedBy' });
+Department.belongsTo(User, { as: 'deleter', foreignKey: 'deletedBy' });
 
 export default Department;

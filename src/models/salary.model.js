@@ -54,6 +54,6 @@ const Salary = sequelize.define('Salary', {
   }
 });
 
-Salary.belongsTo(Employee, { foreignKey: 'emp_id' });
+Salary.belongsTo(Employee, { foreignKey: 'employeeId' });
 
 export default Salary;

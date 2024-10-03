@@ -8,7 +8,7 @@ dotenv.config({
 
 const startServer = async () => {
   try {
-    await sequelize.sync({ force: true }); // Wait for the database to sync
+    await sequelize.sync(); // Wait for the database to sync
     console.log("Database & Tables Created!");
 
     app.listen(process.env.PORT, () => {

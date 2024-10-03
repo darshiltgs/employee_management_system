@@ -23,6 +23,10 @@ export const createEmployee = asyncHandler(async (req, res) => {
   }
 
   //check department if it exists or not
+  const departmentExist = await Department.findByPk(departmentId);
+  if (!departmentExist) {
+    throw new ApiError(400, "Department does not exist");
+  }
 
   // create employee
   const employee = await Employee.create({
@@ -51,8 +55,10 @@ export const getAllEmployees = asyncHandler(async (req, res) => {
   const employees = await Employee.findAll({
     where: { isDeleted: false },
     include: [
-      // { model: Department, attributes: ['name'] },
-      { model: User, as: "creator", attributes: ['username'] }
+      { model: Department, attributes: ['name'] },
+      { model: User, as: "creator", attributes: ['id', 'username'] },
+      { model: User, as: 'updater', attributes: ['id', 'username'] },
+      { model: User, as: 'deleter', attributes: ['id', 'username'] }
     ],
     limit,
     offset,
@@ -82,8 +88,10 @@ export const getEmployeeById = asyncHandler(async (req, res) => {
   const employee = await Employee.findOne({
     where: { id: req.params.id, isDeleted: false },
     include: [
-      // { model: Department, attributes: ['name'] },
-      { model: User, as: "creator", attributes: ['username'] }
+      { model: Department, attributes: ['name'] },
+      { model: User, as: "creator", attributes: ['id', 'username'] },
+      { model: User, as: 'updater', attributes: ['id', 'username'] },
+      { model: User, as: 'deleter', attributes: ['id', 'username'] }
     ]
   });
 
@@ -101,7 +109,13 @@ export const updateEmployee = asyncHandler(async (req, res) => {
   const { name, email, phone, gender, dob, departmentId } = req.body;
 
   const employee = await Employee.findOne({
-    where: { id: req.params.id, isDeleted: false }
+    where: { id: req.params.id, isDeleted: false },
+    include: [
+      { model: Department, attributes: ['name'] },
+      { model: User, as: "creator", attributes: ['id', 'username'] },
+      { model: User, as: 'updater', attributes: ['id', 'username'] },
+      { model: User, as: 'deleter', attributes: ['id', 'username'] }
+    ]
   });
 
   if (!employee) {
@@ -124,6 +138,14 @@ export const updateEmployee = asyncHandler(async (req, res) => {
     }
   }
 
+  // check department if it exists or not
+  if (departmentId) {
+    const department = await Department.findByPk(departmentId);
+    if (!department) {
+      throw new ApiError(404, "Department does not exist");
+    }
+  }
+
   await employee.update({
     name,
     email,
@@ -134,12 +156,6 @@ export const updateEmployee = asyncHandler(async (req, res) => {
     updatedBy: req.user.id,
   });
   res.status(201).json({ message: "Employee updated successfully!!", employee });
-
-  // check department if it exists or not
-  // const department = await Department.findByPk(departmentId);
-  // if (!department) {
-  //   throw new ApiError(404, "Department not found");
-  // }
 });
 
 // delete employee route : /employees/:id [DELETE]
@@ -158,7 +174,6 @@ export const deleteEmployee = asyncHandler(async (req, res) => {
   res.status(201).json({ message: "Employee deleted successfully!!" });
 });
 
-
 // get employees by department route : /employees/department/:id [GET]
 export const getEmployeesByDepartment = asyncHandler(async (req, res) => {
   if (!req.params.id) throw new ApiError(404, "Department id not found");
@@ -172,8 +187,10 @@ export const getEmployeesByDepartment = asyncHandler(async (req, res) => {
   const employees = await Employee.findAll({
     where: { departmentId: req.params.id, isDeleted: false },
     include: [
-      // { model: Department, attributes: ['name'] },
-      { model: User, as: "creator", attributes: ['username'] }
+      { model: Department, attributes: ['name'] },
+      { model: User, as: "creator", attributes: ['id', 'username'] },
+      { model: User, as: 'updater', attributes: ['id', 'username'] },
+      { model: User, as: 'deleter', attributes: ['id', 'username'] }
     ]
   });
 
