@@ -8,6 +8,7 @@ const Employee = sequelize.define('Employee', {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
+    allowNull: false
   },
   name: {
     type: DataTypes.STRING,
@@ -19,7 +20,7 @@ const Employee = sequelize.define('Employee', {
     allowNull: false,
   },
   phone: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.BIGINT(11),
     unique: true,
     allowNull: false,
   },
@@ -77,8 +78,8 @@ const Employee = sequelize.define('Employee', {
 Employee.belongsTo(Department, { foreignKey: 'departmentId' });
 
 // Employee-User relationship
-Employee.belongsTo(User, { as: 'creator', foreignKey: 'created_by' });
-Employee.belongsTo(User, { as: 'updater', foreignKey: 'updated_by' });
-Employee.belongsTo(User, { as: 'deleter', foreignKey: 'deleted_by' });
+Employee.belongsTo(User, { as: 'creator', foreignKey: 'createdBy' });
+Employee.belongsTo(User, { as: 'updater', foreignKey: 'updatedBy' });
+Employee.belongsTo(User, { as: 'deleter', foreignKey: 'deletedBy' });
 
 export default Employee;

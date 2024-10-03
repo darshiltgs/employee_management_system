@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes.js";
+import employeeRouter from "./routes/employee.routes.js";
 
 // define app
 const app = express();
@@ -19,5 +20,6 @@ app.use(express.static("public")) // save some static files
 app.use(cookieParser()); // to parse cookies
 
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/employees", employeeRouter);
 
 export { app }

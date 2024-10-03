@@ -4,7 +4,6 @@ import bcrypt from "bcryptjs";
 import { registerValidation } from "../utils/validations.js";
 import { ApiError } from "../utils/ApiError.js";
 import { createToken } from "../utils/helpers.js";
-import jwt from 'jsonwebtoken';
 
 export const registerUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body; // get data from request
@@ -12,9 +11,14 @@ export const registerUser = asyncHandler(async (req, res) => {
   registerValidation(username, email, password, res); // validation errors
 
   // check if user exists or not
-  const userExist = await User.findOne({ where: { username: username } });
+  const userExist = await User.findOne({ where: { username } });
   if (userExist) {
     throw new ApiError(400, "Username already exists");
+  }
+
+  const emailExist = await User.findOne({ where: { email } });
+  if (emailExist) {
+    throw new ApiError(400, "EmailID already exists");
   }
 
   //create excrypted password
