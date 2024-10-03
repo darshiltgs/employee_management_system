@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes.js";
 import employeeRouter from "./routes/employee.routes.js";
 import departmentRouter from "./routes/department.routes.js";
+import salaryRouter from "./routes/salary.routes.js";
 
 // define app
 const app = express();
@@ -23,5 +24,6 @@ app.use(cookieParser()); // to parse cookies
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/employees", employeeRouter);
 app.use("/api/v1/departments", departmentRouter);
+app.use("/api/v1/salary", salaryRouter);
 
 export { app }
