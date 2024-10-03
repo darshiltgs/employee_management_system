@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import { Department, User } from "../models/index.js";
 import { ApiError } from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
@@ -26,13 +27,25 @@ export const createDepartment = asyncHandler(async (req, res) => {
 export const getAllDepartments = asyncHandler(async (req, res) => {
   // get page and limit from query params
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 2;
+  const limit = parseInt(req.query.limit) || 3;
 
   const offset = (page - 1) * limit; // get the offset
 
+  const { search } = req.query;
+
+  const searchParams = {
+    isDeleted: false,
+  }
+
+  if (search) {
+    searchParams.name = {
+      [Op.like]: `%${search}%`
+    }
+  }
+
   // get all departments
   const departments = await Department.findAll({
-    where: { isDeleted: false },
+    where: searchParams,
     include: [
       { model: User, as: "creator", attributes: ['id', 'username'] },
       { model: User, as: 'updater', attributes: ['id', 'username'] },

@@ -1,6 +1,7 @@
 import { ApiError } from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import { Department, Employee, Salary, User } from "../models/index.js";
+import { Op } from "sequelize";
 
 // create salary route : /salary [POST]
 export const createSalary = asyncHandler(async (req, res) => {
@@ -39,9 +40,31 @@ export const getAllSalaries = asyncHandler(async (req, res) => {
 
   const offset = (page - 1) * limit; // get the offset
 
+  const { employeeId, minSalary, maxSalary } = req.query;
+
+  const filterParams = {
+    isDeleted: false,
+  }
+
+  if (minSalary) {
+    filterParams.salary = {
+      [Op.gte]: minSalary,
+    }
+  }
+
+  if (maxSalary) {
+    filterParams.salary = {
+      [Op.lte]: maxSalary,
+    }
+  }
+
+  if (employeeId) {
+    filterParams.employeeId = employeeId
+  }
+
   // get all salaries
   const salaries = await Salary.findAll({
-    where: { isDeleted: 0 },
+    where: filterParams,
     include: [
       { model: Employee, attributes: ['id', 'name'] },
       { model: User, as: "creator", attributes: ['id', 'username'] },

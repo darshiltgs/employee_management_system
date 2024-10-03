@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import { Department, Employee, User } from "../models/index.js";
 import { ApiError } from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
@@ -51,9 +52,31 @@ export const getAllEmployees = asyncHandler(async (req, res) => {
 
   const offset = (page - 1) * limit; // get the offset
 
+  const { search, departmentId, gender } = req.query;
+
+  const searchFilterParams = {
+    isDeleted: false,
+  }
+
+  if (search) {
+    searchFilterParams[Op.or] = [
+      { name: { [Op.like]: `%${search}%` } },
+      { email: { [Op.like]: `%${search}%` } },
+      { phone: { [Op.like]: `%${search}%` } },
+    ]
+  }
+
+  if (departmentId) {
+    searchFilterParams.departmentId = departmentId
+  }
+
+  if (gender) {
+    searchFilterParams.gender = gender
+  }
+
   // get all employees with pagination
   const employees = await Employee.findAll({
-    where: { isDeleted: false },
+    where: searchFilterParams,
     include: [
       { model: Department, attributes: ['name'] },
       { model: User, as: "creator", attributes: ['id', 'username'] },
