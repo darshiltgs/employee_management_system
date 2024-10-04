@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import { Department, User } from "../models/index.js";
+import { Department, User } from "../models/sequelize/index.js";
 import { ApiError } from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 

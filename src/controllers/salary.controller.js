@@ -1,6 +1,6 @@
 import { ApiError } from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
-import { Department, Employee, Salary, User } from "../models/index.js";
+import { Department, Employee, Salary, User } from "../models/sequelize/index.js";
 import { Op } from "sequelize";
 
 // create salary route : /salary [POST]

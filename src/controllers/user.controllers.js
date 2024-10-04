@@ -1,4 +1,4 @@
-import { User } from "../models/index.js";
+import { User } from "../models/sequelize/index.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import bcrypt from "bcryptjs";
 import { registerValidation } from "../utils/validations.js";
