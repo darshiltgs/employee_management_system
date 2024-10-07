@@ -4,11 +4,13 @@ import { verifyToken } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.route("/").post(verifyToken, createEmployee);
-router.route("/").get(verifyToken, getAllEmployees);
-router.route("/:id").get(verifyToken, getEmployeeById);
-router.route("/:id").put(verifyToken, updateEmployee);
-router.route("/:id").delete(verifyToken, deleteEmployee);
-router.route("/department/:id").get(verifyToken, getEmployeesByDepartment);
+router.use(verifyToken);
+
+router.route("/").post(createEmployee);
+router.route("/").get(getAllEmployees);
+router.route("/:id").get(getEmployeeById);
+router.route("/:id").put(updateEmployee);
+router.route("/:id").delete(deleteEmployee);
+router.route("/department/:id").get(getEmployeesByDepartment);
 
 export default router;

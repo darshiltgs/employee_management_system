@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { registerValidation } from "../utils/validations.js";
 import { ApiError } from "../utils/ApiError.js";
 import { createToken } from "../utils/helpers.js";
+import * as userService from "../services/UserService.js";
 
 export const registerUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body; // get data from request
@@ -11,35 +12,38 @@ export const registerUser = asyncHandler(async (req, res) => {
   registerValidation(username, email, password, res); // validation errors
 
   // check if user exists or not
-  const userExist = await User.findOne({ where: { username } });
-  if (userExist) {
-    throw new ApiError(400, "Username already exists");
-  }
+  // const userExist = await User.findOne({ where: { username } });
+  // if (userExist) {
+  //   throw new ApiError(400, "Username already exists");
+  // }
 
-  const emailExist = await User.findOne({ where: { email } });
-  if (emailExist) {
-    throw new ApiError(400, "EmailID already exists");
-  }
+  // const emailExist = await User.findOne({ where: { email } });
+  // if (emailExist) {
+  //   throw new ApiError(400, "EmailID already exists");
+  // }
 
-  //create excrypted password
-  const encryptedUserPassword = createHashPassword(password);
+  // create excrypted password
+  // const encryptedUserPassword = await createHashPassword(password);
 
-  //create user
-  const newUser = await User.create({
-    username,
-    email,
-    password: encryptedUserPassword,
-  });
+  // console.log(encryptedUserPassword);
 
-  const token = createToken(newUser.email, newUser.id); //create token
+  // create user
+  // const newUser = await User.create({
+  //   username,
+  //   email,
+  //   password: encryptedUserPassword,
+  // });
 
-  newUser.token = token;
+  // const token = createToken(newUser.email, newUser.id); //create token
 
-  await newUser.save(); // save token into userdata
+  // newUser.token = token;
+
+  // await newUser.save(); // save token into userdata
+  const newUser = await userService.registerUser(username, email, password);
 
   res.status(201).json({
-    message: 'User created successfully!',
-    user: newUser
+    message: "User created successfully!",
+    user: newUser,
   });
 });
 
@@ -47,41 +51,46 @@ export const loginUser = asyncHandler(async (req, res) => {
   const { username, password } = req.body; // get data from request
 
   // check if user exists or not
-  const user = await User.findOne({ where: { username } });
-  if (!user) {
-    throw new ApiError(401, "The username is invalid");
-  }
+  // const user = await User.findOne({ where: { username } });
+  // if (!user) {
+  //   throw new ApiError(401, "The username is invalid");
+  // }
 
   // check if password is correct
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) {
-    throw new ApiError(401, "The password is invalid");
-  }
+  // const isMatch = await bcrypt.compare(password, user.password);
+  // if (!isMatch) {
+  //   throw new ApiError(401, "The password is invalid");
+  // }
 
-  const token = createToken(user.email, user.id); //create token
+  // const token = createToken(user.email, user.id); //create token
 
-  user.token = token;
+  // user.token = token;
 
-  await user.save(); // save token into userdata
+  // await user.save(); // save token into userdata
+
+  const user = await userService.loginUser(username, password);
 
   res.status(201).json({
-    message: 'User Logged in successfully!',
-    user: user
+    message: "User Logged in successfully!",
+    user: user,
   });
 });
 
 export const logout = asyncHandler(async (req, res) => {
-  const user = await User.findByPk(req.user.id); // get id from request
+  // const user = await User.findByPk(req.user.id); // get id from request
 
-  if (!user) {
-    throw new ApiError(404, 'User not found');
-  }
+  // if (!user) {
+  //   throw new ApiError(404, "User not found");
+  // }
 
-  user.token = null; // null token into userdata
+  // user.token = null; // null token into userdata
 
-  await user.save(); // save updated userdata
+  // await user.save(); // save updated userdata
+
+  console.log(req.user);
+  await userService.logoutUser(req.user.id);
 
   res.status(200).json({
-    message: 'User Logged out successfully!'
+    message: "User Logged out successfully!",
   });
 });
