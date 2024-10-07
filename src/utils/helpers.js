@@ -1,5 +1,11 @@
 import jwt from 'jsonwebtoken';
 
+export const createHashPassword = async (password) => {
+  // create a hash password
+  const hashedPassword = await bcrypt.hash(password, 10);
+  return hashedPassword;
+}
+
 export const createToken = (email, id) => {
   //create a token
   const token = jwt.sign(

@@ -22,7 +22,7 @@ export const registerUser = asyncHandler(async (req, res) => {
   }
 
   //create excrypted password
-  const encryptedUserPassword = await bcrypt.hash(password, 10);
+  const encryptedUserPassword = createHashPassword(password);
 
   //create user
   const newUser = await User.create({
