@@ -1,8 +1,10 @@
 import jwt from 'jsonwebtoken';
+import bcrypt from "bcryptjs";
 
 export const createHashPassword = async (password) => {
   // create a hash password
   const hashedPassword = await bcrypt.hash(password, 10);
+  console.log(hashedPassword);
   return hashedPassword;
 }
 
