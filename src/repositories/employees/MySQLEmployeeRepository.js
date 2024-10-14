@@ -1,5 +1,6 @@
 import Department from "../../models/sequelize/department.model.js";
 import Employee from "../../models/sequelize/employee.model.js";
+import User from "../../models/sequelize/user.model.js";
 import { ApiError } from "../../utils/ApiError.js";
 
 class MySQLEmployeeRepository {

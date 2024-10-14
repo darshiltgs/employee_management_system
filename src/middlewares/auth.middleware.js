@@ -1,11 +1,10 @@
-import { config } from "../config.js";
-import User from "../models/sequelize/user.model.js";
-import RepositoryFactory from "../repositories/users/RepositoryFactory.js";
 import { ApiError } from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
+import { User } from "../models/index.js";
+import RepositoryFactory from "../repositories/commonrepo/RepositoryFactory.js";
 
-const userRepository = RepositoryFactory.getUserRepository();
+const userRepository = RepositoryFactory.getRepositoryFactory();
 
 export const verifyToken = asyncHandler(async (req, res, next) => {
   const token =
@@ -17,7 +16,7 @@ export const verifyToken = asyncHandler(async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.TOKEN_KEY);
-    const user = await userRepository.findUserById(decoded.user_id);
+    const user = await userRepository.getById(User, decoded.user_id);
     req.user = user;
     next();
   } catch (error) {

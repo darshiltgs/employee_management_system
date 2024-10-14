@@ -74,7 +74,7 @@ export const getAllSalaries = asyncHandler(async (req, res) => {
     }
   }
 
-  if (config.dbType === "mongodb") {
+  if (config.dbType === "mongoose") {
     if (minSalary) {
       filterParams.salary = { $gte: minSalary }; // Greater than or equal to
     }

@@ -1,7 +1,6 @@
-import UserRepository from "./UserRepository.js";
 import User from "../../models/mongodb/user.model.js";
 
-class MongoUserRepository extends UserRepository {
+class MongoUserRepository {
   async findUserByUsername(username) {
     return await User.findOne({ username });
   }

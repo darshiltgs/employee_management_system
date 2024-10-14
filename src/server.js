@@ -1,6 +1,6 @@
 import { app } from "./app.js";
 import { config } from "./config.js";
-import connectDB from "./db/index.js";
+import connectDB, { connectMongoDB } from "./db/index.js";
 import { sequelize } from "./db/sequelize.js";
 import dotenv from "dotenv";
 
@@ -10,7 +10,7 @@ dotenv.config({
 
 const startServer = async () => {
   try {
-    await sequelize.sync({ force: true }); // Wait for the database to sync
+    await sequelize.sync(); // Wait for the database to sync
     console.log("Database & Tables Created!");
 
     app.listen(process.env.PORT, () => {
@@ -24,11 +24,21 @@ const startServer = async () => {
 // Start the server
 if (config.dbType === "mysql") {
   startServer();
-} else {
+} else if (config.dbType === "mongoose") {
   connectDB()
     .then(() => {
       app.listen(process.env.PORT || 8000, () => {
-        console.log(`⚙️ Server is running at port : ${process.env.PORT}`);
+        console.log(`Server is running at port : ${process.env.PORT}`);
+      });
+    })
+    .catch((err) => {
+      console.log("MONGO db connection failed !!! ", err);
+    });
+} else {
+  connectMongoDB()
+    .then((db) => {
+      app.listen(process.env.PORT || 8000, () => {
+        console.log(`Server is running at port : ${process.env.PORT}`);
       });
     })
     .catch((err) => {
