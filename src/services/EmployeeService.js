@@ -19,7 +19,6 @@ export const updateEmployee = async (id, employee) => {
 };
 
 export const deleteEmployee = async (id, deletedData) => {
-  console.log(deletedData);
   return await employeeRepository.deleteCollection(id, deletedData);
 };
 

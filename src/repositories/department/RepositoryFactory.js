@@ -7,7 +7,6 @@ import MySQLDepartmentRepository from "./MySQLDeparmentRepository.js";
 
 class RepositoryFactory {
   getDepartmentRepository() {
-    console.log("Type: " + config.dbType);
     if (config.dbType === "mongoose") {
       return new MongoRepository(Department, "Document");
     } else if (config.dbType === "mysql") {

@@ -25,7 +25,6 @@ class MongoDBRepository {
       throw new Error(`${this.name} with the same name already exists`);
     }
     const result = await this.collection.insertOne(data);
-    console.log(result);
     return { ...data, _id: result.insertedId };
   }
 
@@ -55,7 +54,6 @@ class MongoDBRepository {
       { $set: updateData },
       { returnOriginal: false }
     );
-    console.log(result);
     if (!result.value) {
       throw new Error(`${this.name} not found`);
     }

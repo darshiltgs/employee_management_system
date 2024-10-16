@@ -25,7 +25,6 @@ class MySQLEmployeeRepository {
   }
 
   async getAllEmployees(search, limit, offset) {
-    console.log(search);
     return await Employee.findAll({
       where: search,
       include: [

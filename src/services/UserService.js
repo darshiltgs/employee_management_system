@@ -18,7 +18,7 @@ export const registerUser = async (username, email, password) => {
   }
 
   const encryptedPassword = await createHashPassword(password);
-  const newUser = await userRepository.createCollection({
+  const newUser = await User.create({
     username,
     email,
     password: encryptedPassword,
@@ -27,13 +27,11 @@ export const registerUser = async (username, email, password) => {
   const token = createToken(newUser.email, newUser.id);
   newUser.token = token;
 
-  console.log(newUser);
-
-  if (config.dbType === "mongodb") {
-    await userRepository.updateCollection(newUser._id, newUser);
-  } else {
-    await userRepository.saveUser(newUser);
-  }
+  // if (config.dbType === "mongodb") {
+  //   await userRepository.updateCollection(newUser._id, newUser);
+  // } else {
+  await userRepository.saveUser(newUser);
+  // }
 
   return newUser;
 };

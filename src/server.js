@@ -3,6 +3,8 @@ import { config } from "./config.js";
 import connectDB, { connectMongoDB } from "./db/index.js";
 import { sequelize } from "./db/sequelize.js";
 import dotenv from "dotenv";
+import { authConsumeMessage } from "./rabbitmq/authConsumer.js";
+import { consumeMessage } from "./rabbitmq/createConsumer.js";
 
 dotenv.config({
   path: "./.env",
@@ -24,6 +26,17 @@ const startServer = async () => {
 // Start the server
 if (config.dbType === "mysql") {
   startServer();
+  connectDB()
+    .then(() => {
+      consumeMessage();
+      authConsumeMessage();
+      // app.listen(process.env.PORT || 8000, () => {
+      //   console.log(`Server is running at port : ${process.env.PORT}`);
+      // });
+    })
+    .catch((err) => {
+      console.log("MONGO db connection failed !!! ", err);
+    });
 } else if (config.dbType === "mongoose") {
   connectDB()
     .then(() => {
