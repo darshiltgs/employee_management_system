@@ -1,29 +1,33 @@
-import RepositoryFactory from "../repositories/employees/RepositoryFactory.js";
+import RepositoryFactory from "../repositories/commonrepo/RepositoryFactory.js";
+import { Employee } from "../models/index.js";
 
-const employeeRepository = RepositoryFactory.getEmployeeRepository();
+const employeeRepository = RepositoryFactory.getRepositoryFactory(
+  Employee,
+  "Employee"
+);
 
 export const createEmployee = async (employee) => {
-  return await employeeRepository.createEmployee(employee);
+  return await employeeRepository.createCollection(employee);
 };
 
 export const getEmployeeById = async (id) => {
-  return await employeeRepository.findEmployeeById(id);
+  return await employeeRepository.getCollectionById(id);
 };
 
 export const updateEmployee = async (id, employee) => {
-  return await employeeRepository.updateEmployee(id, employee);
+  return await employeeRepository.updateCollection(id, employee);
 };
 
 export const deleteEmployee = async (id, deletedData) => {
-  console.log(deletedData);
-  return await employeeRepository.deleteEmployee(id, deletedData);
+  return await employeeRepository.deleteCollection(id, deletedData);
 };
 
 export const getAllEmployees = async (searchParams, limit, offset) => {
-  const employees = await employeeRepository.getAllEmployees(
+  const employees = await employeeRepository.getAllCollections(
     searchParams,
     limit,
-    offset
+    offset,
+    ["departmentId", "id"]
   );
   const totalItems = await employeeRepository.count(searchParams); // total count for pagination
   return { employees, totalItems };

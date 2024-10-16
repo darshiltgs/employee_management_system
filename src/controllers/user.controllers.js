@@ -50,6 +50,8 @@ export const registerUser = asyncHandler(async (req, res) => {
 export const loginUser = asyncHandler(async (req, res) => {
   const { username, password } = req.body; // get data from request
 
+  console.log(req.body);
+
   // check if user exists or not
   // const user = await User.findOne({ where: { username } });
   // if (!user) {

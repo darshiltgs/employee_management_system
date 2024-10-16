@@ -51,7 +51,7 @@ export const createEmployee = asyncHandler(async (req, res) => {
 export const getAllEmployees = asyncHandler(async (req, res) => {
   // get page and limit from query params
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 2;
+  const limit = parseInt(req.query.limit) || 5;
   const offset = (page - 1) * limit; // get the offset
   const { search, departmentId, gender } = req.query;
 

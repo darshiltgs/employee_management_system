@@ -1,7 +1,6 @@
-import UserRepository from "./UserRepository.js";
 import User from "../../models/sequelize/user.model.js";
 
-class MySQLUserRepository extends UserRepository {
+class MySQLUserRepository {
   async findUserByUsername(username) {
     return await User.findOne({ where: { username } });
   }

@@ -68,7 +68,7 @@ export const getAllDepartments = asyncHandler(async (req, res) => {
   //   order: [["createdAt", "DESC"]],
   // });
   const { departments, totalItems } = await departmentService.getAllDepartments(
-    searchParams,
+    search,
     limit,
     offset
   );
